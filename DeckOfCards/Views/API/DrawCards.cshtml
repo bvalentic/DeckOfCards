@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Draw Cards";
+}
+
+<h2>Draw Cards</h2>
+
+@*<p>@ViewBag.Cards</p>*@
+
+<div class="form-group">
+    
+    <form action="~/DrawCards" method="post" class="form-control">
+            @for (int i = 0; i < ViewBag.Cards.Count; i++)
+            {
+                <tr class="form-control">
+                    Card @(i + 1): @ViewBag.Cards[i]["value"] of @ViewBag.Cards[i]["suit"].ToString().ToLower()
+                </tr>
+                <img src="@ViewBag.Cards[i]["image"]" />
+                <label>Keep?</label>
+                <input type="checkbox" class="form-control" />
+            }
+    </form>
+</div>
+
+
