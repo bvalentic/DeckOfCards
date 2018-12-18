@@ -8,17 +8,33 @@
 @*<p>@ViewBag.Cards</p>*@
 
 <div class="form-group">
-    
-    <form action="~/DrawCards" method="post" class="form-control">
+    @if (ViewBag.Remaining < TempData["numDraw"])
+    {
+        <p class="alert-danger">Less than @TempData["numDraw"] cards remaining. We highly suggest shuffling the deck.</p>
+    }
+    <form action="~/API/DrawCards?numDraw=5" method="get" class="form-group-sm">
             @for (int i = 0; i < ViewBag.Cards.Count; i++)
             {
-                <tr class="form-control">
-                    Card @(i + 1): @ViewBag.Cards[i]["value"] of @ViewBag.Cards[i]["suit"].ToString().ToLower()
-                </tr>
+            <div class="form-group-sm">
+                @{
+                    string suit = ViewBag.Cards[i]["suit"].ToString().ToLower();
+                    string value = ViewBag.Cards[i]["value"].ToString().ToLower();
+                    value = char.ToUpper(value[0]) + value.Substring(1);
+                }
+
+                Card @(i + 1): @value of @suit
+                
                 <img src="@ViewBag.Cards[i]["image"]" />
                 <label>Keep?</label>
-                <input type="checkbox" class="form-control" />
+                <input type="checkbox" class="form-group-lg" />
+            </div>
             }
+        <p>Cards remaining in deck: @ViewBag.Remaining</p>
+        <input type="submit" value="Draw Again" />
+    </form>
+    
+    <form action="~/API/Reshuffle" method="get" class="form-group-sm">
+        <input type="submit" value="Reshuffle Deck" />
     </form>
 </div>
 

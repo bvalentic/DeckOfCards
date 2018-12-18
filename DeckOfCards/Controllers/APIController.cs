@@ -50,6 +50,7 @@ namespace DeckOfCards.Controllers
             if (TempData["DeckID"] != null)
             {
                 string deckID = TempData["DeckID"].ToString();
+                TempData["numDraw"] = numDraw;
 
                 HttpWebRequest request = WebRequest.CreateHttp($"https://deckofcardsapi.com/api/deck/{deckID}/draw/?count={numDraw}");
                 request.UserAgent = userAgent;
@@ -59,21 +60,38 @@ namespace DeckOfCards.Controllers
                 {
                     StreamReader data = new StreamReader(response.GetResponseStream());
 
-                    JObject hand = JObject.Parse(data.ReadToEnd());
-
-                    ViewBag.Cards = hand["cards"];
+                    JObject deck = JObject.Parse(data.ReadToEnd());
+                    ViewBag.Remaining = deck["remaining"];
+                    ViewBag.Cards = deck["cards"];
                 }
 
                 TempData["DeckID"] = TempData["DeckID"];
+                TempData["numDraw"] = TempData["numDraw"];
             }
 
-            return View();
+            return View(numDraw);
         }
 
         // GET: API
-        public ActionResult ShuffleExistingDeck()
+        public ActionResult Reshuffle()
         {
-            return View();
+            if (TempData["DeckID"] != null)
+            {
+                string deckID = TempData["DeckID"].ToString();
+
+                HttpWebRequest request = WebRequest.CreateHttp($"https://deckofcardsapi.com/api/deck/{deckID}/shuffle/");
+                request.UserAgent = userAgent;
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    ViewBag.NewDeckMessage = "The deck has been reshuffled";
+                    TempData["DeckID"] = TempData["DeckID"];
+                }
+                return View("GetNewDeck");
+            }           
+
+            return View("GetNewDeck");
         }
     }
 }
