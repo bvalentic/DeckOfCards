@@ -37,7 +37,7 @@ namespace DeckOfCards.Controllers
                 //to reestablish TempData as itself before switching ActionResults / Views
                 TempData["DeckID"] = TempData["DeckID"];
 
-                ViewBag.NewDeckMessage = "A new deck has been shuffled";
+                ViewBag.NewDeckMessage = "A new deck has been shuffled.";
 
             }            
 
@@ -85,7 +85,7 @@ namespace DeckOfCards.Controllers
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    ViewBag.NewDeckMessage = "The deck has been reshuffled";
+                    ViewBag.NewDeckMessage = "The deck has been reshuffled.";
                     TempData["DeckID"] = TempData["DeckID"];
                 }
                 return View("GetNewDeck");

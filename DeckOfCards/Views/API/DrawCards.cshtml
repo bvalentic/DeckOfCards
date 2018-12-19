@@ -12,7 +12,7 @@
     {
         <p class="alert-danger">Less than @TempData["numDraw"] cards remaining. We highly suggest shuffling the deck.</p>
     }
-    <form action="~/API/DrawCards?numDraw=5" method="get" class="form-group-sm">
+    <form action="~/API/DrawCards" method="get" class="form-group-sm">
             @for (int i = 0; i < ViewBag.Cards.Count; i++)
             {
             <div class="form-group-sm">
@@ -30,6 +30,7 @@
             </div>
             }
         <p>Cards remaining in deck: @ViewBag.Remaining</p>
+        <input type="hidden" name="numDraw" value="@TempData["numDraw"]">
         <input type="submit" value="Draw Again" />
     </form>
     
